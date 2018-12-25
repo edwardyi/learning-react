@@ -32,8 +32,9 @@ class SendMessageForm extends React.Component{
 				<input 	
 					onChange={this.handleChange.bind(this)}
 					value={this.state.message}
-					placeholder="打一些字吧" 
+					placeholder={!this.props.roomId ? "建立/選擇聊天室" : "打一些字吧"} 
 					type="text"
+					disabled={!this.props.roomId}
 				/>
 			</form>
 		);

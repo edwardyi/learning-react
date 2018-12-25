@@ -6,6 +6,14 @@
   --send-message-form: #F5F5F5;
 }
 
+:root {
+  --main-color: #112233;
+  --secondary-color: #82c4f0;
+  --main-text-color: #3e5869;
+  --secondary-text-color: #b0c7d6;
+  --send-message-form: rgb(197, 187, 187);
+}
+
 html, body {
   height: 100%;
   margin: 0;
