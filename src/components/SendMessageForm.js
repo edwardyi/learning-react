@@ -1,24 +1,29 @@
 import React from 'react';
 
 class SendMessageForm extends React.Component{
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			message:''
 		};
-		// this.handleChange = this.handleChange.bind(this)
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
 	handleChange(e) {
 		e.preventDefault();
-		console.log(e.target.value);
+		// console.log(e.target.value);
 		this.setState({
 			message:e.target.value
 		});
+		// 要加上這一段去觸發isTyping的事件
+		if (this.props.onChange) {
+			this.props.onChange();
+		}
 	}
 
 	handleSubmit(e) {
 		e.preventDefault();
-		this.props.sendMessage(this.state.message);
+		this.props.onSubmit(this.state.message);
 		this.setState({
 			message:''
 		});

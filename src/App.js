@@ -4,6 +4,7 @@ import ChatKit from '@pusher/chatkit';
 import SendMessageForm from './components/SendMessageForm';
 import RoomList from './components/RoomList';
 import NewRoomForm from './components/NewRoomForm';
+import TypingIndicator from './components/TypingIndicator';
 
 import {tokenUrl, instanceLocator} from './config';
 class App extends Component {
@@ -13,11 +14,13 @@ class App extends Component {
 			roomId:null,
 			messages:[],
 			joinableRooms:[],
-			joinedRooms:[] //19376382
+			joinedRooms:[], //19376382
+			whosTyping:[]
 		};
 		this.sendMessage = this.sendMessage.bind(this);
 		this.subscribeToRoom = this.subscribeToRoom.bind(this);
 		this.getRooms = this.getRooms.bind(this);
+		this.typing = this.typing.bind(this);
 	}
 	componentDidMount() {
 		const chatManager = new ChatKit.ChatManager({
@@ -58,7 +61,20 @@ class App extends Component {
 					this.setState({
 						messages:[...this.state.messages, message]
 					});
-				}
+				},
+				onUserStartedTyping: user => {
+					this.setState({
+						whosTyping:[...this.state.whosTyping, user.name]
+					});
+					// console.log(`${user.name}正在輸入中`);
+				},
+				onUserStoppedTyping: user => {
+					this.setState({
+						whosTyping: this.state.whosTyping.filter(
+							username => username !== user.name
+						),
+					});
+				},
 			}
 		}).then(room=>{
 			this.setState({
@@ -66,13 +82,17 @@ class App extends Component {
 			});
 			// 再重新取得一次有哪些聊天室可以用
 			this.getRooms();
-		}).catch(err => console.log('聊天室開啟錯誤', err));
+		}).catch(err => console.log('聊天室開啟錯誤', err, roomId,"roomIdTeset"));
 	}
 	sendMessage(text) {
 		this.currentUser.sendMessage({
 			text,
 			roomId: this.state.roomId//this.state.joinedRooms
 		});
+	}
+	typing() {
+		this.currentUser.isTypingIn({roomId:this.state.roomId}).catch(err=>{console.log('取得正在輸入使用者輸入錯誤',err);})
+		console.log('typing is calling',this.state.whosTyping)
 	}
 	createNewRoom(name){
 		// console.log(name)
@@ -92,7 +112,8 @@ class App extends Component {
 					rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}
 				/>
 				<MessageList roomId={this.state.roomId} messages={this.state.messages}/>
-				<SendMessageForm roomId={this.state.roomId} sendMessage={this.sendMessage} />
+				<TypingIndicator typingUsers={this.state.whosTyping} />
+				<SendMessageForm roomId={this.state.roomId} onSubmit={this.sendMessage} onChange={this.typing} />
 				<NewRoomForm createNewRoom={this.createNewRoom.bind(this)} />
 			</div>
 		);
