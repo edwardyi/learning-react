@@ -1,15 +1,18 @@
 import React from 'react';
 
-class Room extends React.Component{
+class RoomList extends React.Component{
 	render(){
 		return(
 			<div className="rooms-list">
-				<h1 className="help-text">房間列表</h1>
 				<ul>
+					<h3>房間列表</h3>
 					{this.props.rooms.map((room)=> {
-						console.log(room.name)
 						return <li key={room.id} className="room">
-							<a href="#">#{room.name}</a>
+							<a 
+								onClick={()=>this.props.subscribeToRoom(room.id)} 
+								href="#">
+								#{room.name}
+							</a>
 						</li>;
 					})}
 				</ul>
@@ -18,4 +21,4 @@ class Room extends React.Component{
 	}
 }
 
-export default Room;
+export default RoomList;
