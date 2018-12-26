@@ -2,13 +2,17 @@ import React from 'react';
 import Chatkit from '@pusher/chatkit';
 import {instanceLocator} from '../config';
 import MessageList from './MessageList';
+import SendMessageForm from './SendMessageForm';
 
 class ChatScreen extends React.Component{
   constructor(){
     super();
     this.state = {
-      messages:[]
+      messages:[],
+      currentUser:{},
+      currentRoom:{}
     };
+    this.sendMessage = this.sendMessage.bind(this);
   }
   componentDidMount(){
     // 使用chatkit-pusher建立
@@ -21,6 +25,9 @@ class ChatScreen extends React.Component{
     });
     chatManager.connect()
     .then((currentUser) => {
+      this.setState({
+        currentUser
+      })
       return currentUser.subscribeToRoom({
           roomId:19376382,
           messageLimit: 100,
@@ -34,9 +41,17 @@ class ChatScreen extends React.Component{
       });
     })
     .then(currentRoom => {
-      console.log(currentRoom)
+      this.setState({
+        currentRoom
+      })
     })
     .catch((err) => {console.error('建立ChatKit失敗',err)});
+  }
+  sendMessage(text) {
+    this.state.currentUser.sendMessage({
+      roomId:this.state.currentRoom.id,
+      text
+    });
   }
   render(){
     return(
@@ -44,6 +59,7 @@ class ChatScreen extends React.Component{
         <h3>
            Chat Begin
            <MessageList messages={this.state.messages} />
+           <SendMessageForm onSubmit={this.sendMessage}/>
         </h3>
       </div>
     )
