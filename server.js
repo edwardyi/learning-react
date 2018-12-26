@@ -14,18 +14,21 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post('/users', (req,res) => {
+app.post('/users', (req, res) => {
+	console.log('this post is from  log',req.body.username);
 	const {username} = req.body;
-	chatkit.createGlobalRole({
+	chatkit.createUser({
 		name:username,
 		id:username
 	})
-		.then(()=>sendStatus(201))
-		.catch(err=>{
-			if (err.error_type == 'services/chatkit/user/user_already_exists') {
+		.then(()=> res.sendStatus(201))
+		.catch(error=>{
+			console.log(error)
+			// 如果不是用戶已經存在的類型,就用其他類型的錯誤來紀錄錯誤訊息
+			if (error.error === 'services/chatkit/user_already_exists') {
 				res.sendStatus(200);
 			} else {
-				res.status(err.statusCode).json(err);
+				res.status(error.statusCode).json(error);
 			}
 		});
 });
