@@ -9,7 +9,7 @@ class MessageList extends React.Component{
             (<li key={index}>
                 <div>
                   <span>{message.senderId}</span>
-                  <span>{message.text}</span>
+                  <p>{message.text}</p>
                 </div>
               </li>)
           )}

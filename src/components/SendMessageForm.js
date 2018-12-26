@@ -19,13 +19,14 @@ class SendMessageForm extends React.Component{
 		this.setState({
 			text: e.target.value
 		});
+		this.props.onChange();
 	}
 	render() {
 		return (
 			<div>
 				<form onSubmit={this.onSubmit}>
-					<input type="text" placeholder="請輸入登入帳號" onChange={this.onChange} />
-					<input type="submit" value="登入" />
+					<input type="text" placeholder="請輸入訊息" onChange={this.onChange} />
+					<input type="submit" value="送出" />
 				</form>
 			</div>
 		);
