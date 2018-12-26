@@ -33,6 +33,16 @@ app.post('/users', (req, res) => {
 		});
 });
 
+app.post('/authenicate', (req, res) => {
+	// 是用query的user_id而不是ChatScreen傳來的userId(固定抓chatKit Manager的userId參數)
+	const authData = chatkit.authenticate({ userId: req.query.user_id });
+	res.status(authData.status).send(authData.body);
+	console.log('此訊息只會出現在server端:',req.query, req.body.userId)
+	// const {grant_type} = req.body;
+	// console.log('驗證',grant_type, req.body)
+	// res.json(chatkit.authenticate({grant_type, userId:req.body.userId}),req.query.userId);
+});
+
 const PORT = 3001;
 app.listen(PORT, err=>{
 	if(err) {

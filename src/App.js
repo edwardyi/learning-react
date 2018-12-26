@@ -8,7 +8,8 @@ class App extends Component {
 		super();
 		this.onUserSubmitted = this.onUserSubmitted.bind(this);
 		this.state = {
-			whereAreYou: 'usernameform'
+			whereAreYou: 'usernameform',
+			username: ''
 		};
 	}
 	onUserSubmitted(username){
@@ -21,7 +22,8 @@ class App extends Component {
 			body: JSON.stringify({username})
 		}).then(()=> { 
 			this.setState({
-				whereAreYou : 'chatSCreen'
+				whereAreYou : 'chatSCreen',
+				username: username
 			})
 			console.log(`${username}成功進入聊天室`)
 		})
@@ -31,7 +33,7 @@ class App extends Component {
 		if (this.state.whereAreYou === 'usernameform') {
 			return (<UsernameForm onSubmit={this.onUserSubmitted} />);
 		} else {
-			return (<ChatScreen />)
+			return (<ChatScreen username={this.state.username}/>)
 		}
 	}
 }
