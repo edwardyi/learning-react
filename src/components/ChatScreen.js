@@ -3,6 +3,7 @@ import Chatkit from '@pusher/chatkit';
 import {instanceLocator} from '../config';
 import MessageList from './MessageList';
 import SendMessageForm from './SendMessageForm';
+import TypingHint from './TypingHint';
 
 class ChatScreen extends React.Component{
   constructor(){
@@ -81,7 +82,7 @@ class ChatScreen extends React.Component{
         <h3>
            Chat Begin
            <MessageList messages={this.state.messages} />
-           {JSON.stringify(this.state.whoIsTyping)}
+           <TypingHint whoIsTyping={this.state.whoIsTyping} />
            <SendMessageForm onSubmit={this.sendMessage} onChange={this.typingMessage}/>
         </h3>
       </div>
