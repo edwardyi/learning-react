@@ -4,6 +4,7 @@ import {instanceLocator} from '../config';
 import MessageList from './MessageList';
 import SendMessageForm from './SendMessageForm';
 import TypingHint from './TypingHint';
+import WhoisOnline from './WhoisOnline';
 
 class ChatScreen extends React.Component{
   constructor(){
@@ -54,6 +55,15 @@ class ChatScreen extends React.Component{
                   username => username !== user.name
                 )
               })
+            },
+            onUserJoined: () => {
+              this.forceUpdate();
+            },
+            onUserLeft: () => {
+              this.forceUpdate();
+            },
+            onPresenceChange: () =>{
+              this.forceUpdate();
             }
           }
       });
@@ -78,13 +88,29 @@ class ChatScreen extends React.Component{
   }
   render(){
     return(
-      <div>
-        <h3>
-           Chat Begin
-           <MessageList messages={this.state.messages} />
-           <TypingHint whoIsTyping={this.state.whoIsTyping} />
-           <SendMessageForm onSubmit={this.sendMessage} onChange={this.typingMessage}/>
-        </h3>
+      <div style={{
+        display:'flex',
+        height:'100vh'
+      }}>
+        <div style={{
+          width: '30%',
+          backgroundColor: 'tomato'
+        }}>
+          <h2>誰在線上</h2>
+          <WhoisOnline users={this.state.currentRoom.users} />
+        </div>
+        <div style={{
+            display:'flex',
+            flexDirection:'column'
+          }}>
+          <div style={{
+              flex:1
+            }}>
+              <MessageList messages={this.state.messages} />
+          </div>
+          <TypingHint whoIsTyping={this.state.whoIsTyping} />
+          <SendMessageForm onSubmit={this.sendMessage} onChange={this.typingMessage}/>
+        </div>
       </div>
     )
   }
