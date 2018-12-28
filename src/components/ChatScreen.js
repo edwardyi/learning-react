@@ -94,10 +94,10 @@ class ChatScreen extends React.Component{
       }}>
         <div style={{
           width: '30%',
-          backgroundColor: 'tomato'
+          backgroundColor: '#a5dfe9'
         }}>
           <h2>誰在線上</h2>
-          <WhoisOnline users={this.state.currentRoom.users} />
+          <WhoisOnline users={this.state.currentRoom.users} currentUser={this.state.currentUser} />
         </div>
         <div style={{
             display:'flex',
